@@ -3,7 +3,7 @@ name: email testing
 on: 
   push:
     branches:
-       - master 
+       - main 
 
 jobs:
   email-notification:
