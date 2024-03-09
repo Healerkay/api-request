@@ -16,7 +16,7 @@ jobs:
         with:
           status: success
           message: "Build Started! :rocket:"
-          channel-id: ${{ secrets.SLACK_CHANNEL_ID }}
+          channel-id: C06NS9M97AQ
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
 
@@ -26,6 +26,7 @@ jobs:
         with:
           status: running
           message: "Build in progress... :construction_worker:"
+          channel-id: C06NS9M97AQ
           update-ts: ${{ steps.slack.outputs.ts }}
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
@@ -36,6 +37,7 @@ jobs:
         with:
           status: failure
           message: "Build failed! :x:"
+          channel-id: C06NS9M97AQ
           update-ts: ${{ steps.update-slack.outputs.ts }}  # Corrected reference
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
