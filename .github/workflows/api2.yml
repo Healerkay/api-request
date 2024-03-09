@@ -1,44 +1,43 @@
-name: status
+# name: status
 
-on:
-  workflow_run:
-    workflows: ["email testing"]
-    types:
-      - completed
+# on:
+#   workflow_run:
+#     workflows: ["email testing"]
+#     types:
+#       - completed
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Post message to Slack
-        id: slack
-        uses: act10ns/slack@v3
-        with:
-          status: success
-          message: "Build Started! :rocket:"
-          channel-id: C06NS9M97AQ
-        env:
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Post message to Slack
+#         id: slack
+#         uses: act10ns/slack@v3
+#         with:
+#           status: success
+#           message: "Build Started! :rocket:"
+#           channel-id: C06NS9M97AQ
+#         env:
+#           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
 
-      - name: Update Slack Message - Running
-        id: update-slack
-        uses: act10ns/slack@v3
-        with:
-          status: running
-          message: "Build in progress... :construction_worker:"
-          channel-id: C06NS9M97AQ
-          update-ts: ${{ steps.slack.outputs.ts }}
-        env:
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+#       - name: Update Slack Message - Running
+#         id: update-slack
+#         uses: act10ns/slack@v3
+#         with:
+#           status: running
+#           message: "Build in progress... :construction_worker:"
+#           channel-id: C06NS9M97AQ
+#           update-ts: ${{ steps.slack.outputs.ts }}
+#         env:
+#           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
 
-      - name: Update Slack Message - Failed
-        id: update-slack-failed
-        uses: act10ns/slack@v3
-        with:
-          status: failure
-          message: "Build failed! :x:"
-          channel-id: C06NS9M97AQ
-          update-ts: ${{ steps.update-slack.outputs.ts }}  # Corrected reference
-        env:
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-s
+#       - name: Update Slack Message - Failed
+#         id: update-slack-failed
+#         uses: act10ns/slack@v3
+#         with:
+#           status: failure
+#           message: "Build failed! :x:"
+#           channel-id: C06NS9M97AQ
+#           update-ts: ${{ steps.update-slack.outputs.ts }}  # Corrected reference
+#         env:
+#           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}

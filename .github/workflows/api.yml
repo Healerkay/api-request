@@ -11,10 +11,6 @@ jobs:
     steps:
       - name: Notification
         run: "echo preparing notification"
-    
-
-    
-
 
       - name: checks out the repository
         uses: actions/checkout@v4
@@ -23,15 +19,46 @@ jobs:
         id: slack
         uses: slackapi/slack-github-action@v1.25.0
         with:
-        # Slack channel id, channel name, or user id to post message.
-        # See also: https://api.slack.com/methods/chat.postMessage#channels
-        # You can pass in multiple channels to post to by providing a comma-delimited list of channel IDs.
+          # Slack channel id, channel name, or user id to post message.
+          # See also: https://api.slack.com/methods/chat.postMessage#channels
+          # You can pass in multiple channels to post to by providing a comma-delimited list of channel IDs.
           channel-id: C06NS9M97AQ
-        # For posting a simple plain text message
+          # For posting a simple plain text message
           slack-message: "GitHub build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
         env:
-           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
 
+      - name: Post message to Slack
+        id: slack-sucess
+        uses: act10ns/slack@v3
+        with:
+          status: success
+          message: "Build Started! :rocket:"
+          channel-id: C06NS9M97AQ
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+
+      - name: Update Slack Message - Running
+        id: update-slack
+        uses: act10ns/slack@v3
+        with:
+          status: running
+          message: "Build in progress... :construction_worker:"
+          channel-id: C06NS9M97AQ
+          update-ts: ${{ steps.slack.outputs.ts }}
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+
+      - name: Update Slack Message - Failed
+        id: update-slack-failed
+        uses: act10ns/slack@v3
+        with:
+          status: failure
+          message: "Build failed! :x:"
+          channel-id: C06NS9M97AQ
+          update-ts: ${{ steps.update-slack.outputs.ts }}  # Corrected reference
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
 
       - name: "logs into docker"
         uses: docker/login-action@v3
